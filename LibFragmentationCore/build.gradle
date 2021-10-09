@@ -1,0 +1,21 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion compile_sdk_version.toInteger()
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdk target_sdk_version.toInteger()
+
+        consumerProguardFiles 'proguard-rules.pro'
+    }
+
+
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    compileOnly "androidx.appcompat:appcompat:1.2.0"
+}
