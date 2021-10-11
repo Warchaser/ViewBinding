@@ -22,7 +22,7 @@ abstract class BaseActivity<P : IBasePresenter<V>, V : IBaseView, VB : ViewBindi
 
     private lateinit var mDelegate : SupportActivityDelegate
 
-    lateinit var mViewBond : VB
+    private lateinit var mViewBond : VB
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,12 +43,7 @@ abstract class BaseActivity<P : IBasePresenter<V>, V : IBaseView, VB : ViewBindi
         afterSetContentView(savedInstanceState)
     }
 
-//    protected inline fun <T : ViewBinding> AppCompatActivity.binding(crossinline bindingInflater: (LayoutInflater) -> T) =
-//        lazy(LazyThreadSafetyMode.SYNCHRONIZED){
-//            val invoke = bindingInflater.invoke(layoutInflater)
-//            setContentView(invoke.root)//optional
-//            invoke
-//        }
+    protected fun getViewBound() : VB = mViewBond
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)

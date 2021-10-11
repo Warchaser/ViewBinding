@@ -9,7 +9,12 @@ class MainActivity : BaseActivity<MainPresenter, MainView, ActivityMainBinding>(
 
     override fun afterSetContentView(savedInstanceState: Bundle?) {
         super.afterSetContentView(savedInstanceState)
-        mViewBond.mTv.text = "123"
+        initializeFragment()
+        getViewBound().mTv.text = "This part is the MainActivity!!!"
+    }
+
+    private fun initializeFragment(){
+        loadRootFragment(R.id.mContainer, MainFragment.newInstance())
     }
 
     override fun onLoadPresenter(): MainPresenter = MainPresenter(this)
