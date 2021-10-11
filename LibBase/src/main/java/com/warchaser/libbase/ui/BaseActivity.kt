@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
-import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
 import com.trello.rxlifecycle3.components.support.RxFragmentActivity
 import com.warchaser.libbase.ui.presenter.IBasePresenter
