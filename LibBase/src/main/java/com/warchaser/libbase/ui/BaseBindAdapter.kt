@@ -27,6 +27,12 @@ abstract class BaseBindAdapter<T, VB : ViewBinding, VH : BaseBindAdapter.BaseBin
         mCurrentIndex = position
     }
 
+    fun notifyAllItemsChangedByRange(){
+        for(i in 0 until itemCount){
+            notifyItemsChanged(i)
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         val baseViewHolder : VH
         val viewBinding = mInflate(LayoutInflater.from(parent.context), parent, false)
