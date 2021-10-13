@@ -13,7 +13,7 @@ abstract class LazyFragment <P : IBasePresenter<V>, V : IBaseView, VB : ViewBind
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
-        mIsVisibleToUser = !hidden
+        mIsVisibleToUser = hidden.not()
         judgeLazyInit()
     }
 

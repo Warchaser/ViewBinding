@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ProgressbarCircle" parent="Widget.AppCompat.ProgressBar">
+        <item name="android:indeterminateDrawable">@drawable/anim_loading</item>
+        <item name="android:indeterminateDuration">1000</item>
+    </style>
+</resources>

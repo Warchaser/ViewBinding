@@ -33,6 +33,7 @@ abstract class BaseFragment <P : IBasePresenter<V>, V : IBaseView, VB : ViewBind
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
         mDelegate.onCreate(savedInstanceState)
         mViewBound = mInflate(inflater, container, false)
         TAG = PackageUtil.getSimpleClassName(this)

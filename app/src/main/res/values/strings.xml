@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ViewBinding</string>
+
+    <string name="reload_string">网络好像出了问题，请检查网络设置</string>
+    <string name="reload_button">重新加载</string>
+    <string name="hint_loading">加载中…</string>
+    <string name="hint_empty_data_app">暂无应用</string>
 </resources>
