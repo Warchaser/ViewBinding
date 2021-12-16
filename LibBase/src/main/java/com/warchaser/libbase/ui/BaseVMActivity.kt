@@ -1,27 +1,43 @@
 package com.warchaser.libbase.ui
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
-import com.trello.rxlifecycle3.components.support.RxFragmentActivity
-import com.warchaser.libbase.ui.presenter.IBasePresenter
-import com.warchaser.libbase.ui.presenter.IBaseView
+import com.trello.rxlifecycle3.components.support.RxAppCompatActivity
 import com.warchaser.libcommonutils.AppManager
 import com.warchaser.libcommonutils.PackageUtil
 import me.yokeyword.fragmentation.*
 import me.yokeyword.fragmentation.anim.FragmentAnimator
 
-abstract class BaseActivity<P : IBasePresenter<V>, V : IBaseView, VB : ViewBinding>(private val inflate : (LayoutInflater) -> VB) : RxFragmentActivity(), ISupportActivity, IBaseView{
+abstract class BaseVMActivity<VB: ViewBinding>(private val inflate : (LayoutInflater) -> VB)  : RxAppCompatActivity(), ISupportActivity {
 
     protected lateinit var TAG : String
-    protected var mPresenter : P? = null
 
     private lateinit var mDelegate : SupportActivityDelegate
 
     private lateinit var mViewBond : VB
+
+    private val mActivityProvider : ViewModelProvider by lazy{
+        ViewModelProvider(this)
+    }
+
+//    val mApplicationProvider : ViewModelProvider by lazy{
+//        ViewModelProvider(this.applicationContext as App)
+//    }
+
+    open fun getApplicationFactory(activity : Activity) : ViewModelProvider.Factory{
+        activity.let {
+            it.application.let { application ->
+                return ViewModelProvider.AndroidViewModelFactory.getInstance(application)
+            }
+        }
+    }
+
+    protected open fun <T : ViewModel> getActivityScopeViewModel(modelClass : Class<T>) : T = mActivityProvider.get(modelClass)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,15 +46,9 @@ abstract class BaseActivity<P : IBasePresenter<V>, V : IBaseView, VB : ViewBindi
         mDelegate.onCreate(savedInstanceState)
         AppManager.getInstance().addActivity(this)
 
-        mPresenter = onLoadPresenter()?.apply {
-            attachView(this@BaseActivity as V)
-        }
-
         beforeSetContentView(savedInstanceState)
-
         mViewBond = inflate(layoutInflater)
         setContentView(mViewBond.root)
-
         afterSetContentView(savedInstanceState)
     }
 
@@ -59,13 +69,8 @@ abstract class BaseActivity<P : IBasePresenter<V>, V : IBaseView, VB : ViewBindi
         finishAction()
     }
 
-    protected open fun finishAction(){
+    protected open fun finishAction() {
         AppManager.getInstance().removeActivity(this)
-
-        mPresenter?.run {
-            detachView()
-        }
-        mPresenter = null
     }
 
     /**
@@ -77,12 +82,6 @@ abstract class BaseActivity<P : IBasePresenter<V>, V : IBaseView, VB : ViewBindi
      * setContent之后操作
      */
     protected open fun afterSetContentView(savedInstanceState: Bundle?) {}
-
-    protected abstract fun onLoadPresenter(): P?
-
-    fun startCertainActivity(activityClass: Class<out Activity?>?) {
-        startActivity(Intent(this, activityClass))
-    }
 
     override fun getSupportDelegate(): SupportActivityDelegate? = mDelegate
 
@@ -254,5 +253,4 @@ abstract class BaseActivity<P : IBasePresenter<V>, V : IBaseView, VB : ViewBindi
     open fun showHideFragment(showFragment: ISupportFragment?) {
         mDelegate.showHideFragment(showFragment)
     }
-
 }

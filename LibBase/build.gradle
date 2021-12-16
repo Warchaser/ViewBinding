@@ -62,6 +62,10 @@ dependencies {
     api 'com.squareup.okhttp3:okhttp:3.10.0'
     api 'com.squareup.okhttp3:logging-interceptor:3.9.0'
 
+    //Lifecycle
+    api "androidx.lifecycle:lifecycle-viewmodel-ktx:${lifecycle_version}"
+    api "androidx.lifecycle:lifecycle-runtime-ktx:${lifecycle_version}"
+
     api project(':LibFragmentationCore')
     api project(':LibCommonUtils')
 }
