@@ -32,7 +32,7 @@ open class BaseViewModel : ViewModel(){
                 }
             }.onSuccess {
                 success(it)
-            }.onFailure {  err ->
+            }.onFailure { err ->
                 error(err)
             }
         }
