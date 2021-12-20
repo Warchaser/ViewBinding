@@ -5,7 +5,6 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.warchaser.libbase.ui.BaseFragment
 import com.warchaser.viewbinding.databinding.FragmentMainBinding
 import com.warchaser.viewbinding.gloading.GLoadingFragment
 import com.warchaser.viewbinding.home.adapter.MainAdapter
