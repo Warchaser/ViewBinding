@@ -5,4 +5,8 @@
     <string name="reload_button">重新加载</string>
     <string name="hint_loading">加载中…</string>
     <string name="hint_empty_data_app">暂无应用</string>
+
+    <string name="btn_launch_view_binding_demo">launch view binding demo</string>
+    <string name="btn_launch_mvvm_demo">launch mvvm demo</string>
+
 </resources>

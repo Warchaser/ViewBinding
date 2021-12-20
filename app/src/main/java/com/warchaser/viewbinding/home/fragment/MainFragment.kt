@@ -1,4 +1,4 @@
-package com.warchaser.viewbinding
+package com.warchaser.viewbinding.home.fragment
 
 import android.os.Bundle
 import android.os.Handler
@@ -32,7 +32,7 @@ class MainFragment : GLoadingFragment<MainFragmentPresenter, MainFragmentView, F
     }
 
     companion object{
-        fun newInstance() : MainFragment{
+        fun newInstance() : MainFragment {
             return MainFragment().apply {
                 arguments = Bundle()
             }
