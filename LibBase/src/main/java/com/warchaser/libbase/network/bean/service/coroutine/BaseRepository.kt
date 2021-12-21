@@ -1,4 +1,4 @@
-package com.warchaser.libbase.ui
+package com.warchaser.libbase.network.bean.service.coroutine
 
 import com.warchaser.libbase.network.bean.coroutine.Response
 import com.warchaser.libbase.network.bean.coroutine.Result

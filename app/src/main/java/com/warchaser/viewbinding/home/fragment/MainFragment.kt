@@ -17,9 +17,6 @@ class MainFragment : GLoadingFragment<MainFragmentPresenter, MainFragmentView, F
 
     override fun onInitView(view: View, savedInstanceState: Bundle?) {
         showLoading()
-        Handler(Looper.getMainLooper()).postDelayed({
-            showLoadSuccess()
-        }, 3000)
         getViewBound().mTv.text = "This part is the MainFragment!!!"
         mAdapter = MainAdapter()
         getViewBound().mRecyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -29,6 +26,9 @@ class MainFragment : GLoadingFragment<MainFragmentPresenter, MainFragmentView, F
             list.add("$i")
         }
         mAdapter?.notifyDataSetAllChanged(list)
+        Handler(Looper.getMainLooper()).postDelayed({
+            showLoadSuccess()
+        }, 3000)
     }
 
     companion object{
