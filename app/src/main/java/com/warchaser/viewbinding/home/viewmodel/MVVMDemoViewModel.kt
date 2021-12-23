@@ -25,7 +25,7 @@ class MVVMDemoViewModel : BaseViewModel(){
 
     fun getVIN(){
         viewModelScope.launch(Dispatchers.Main){
-            NLog.e("MVVMDemoViewModel", "getVIN")
+            NLog.e(TAG, "getVIN")
             repository.getVIN().collect {
                 _uiState.postValue(it)
             }

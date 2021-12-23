@@ -2,9 +2,12 @@ package com.warchaser.libbase.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.warchaser.libcommonutils.PackageUtil
 import kotlinx.coroutines.*
 
 open class BaseViewModel : ViewModel(){
+
+    protected val TAG : String by lazy { PackageUtil.getSimpleClassName(this) }
 
     fun launchOnUI(block : suspend CoroutineScope.() -> Unit){
         viewModelScope.launch { block() }
