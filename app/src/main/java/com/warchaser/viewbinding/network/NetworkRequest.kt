@@ -13,12 +13,9 @@ class NetworkRequest private constructor(): BaseRetrofitProvider(){
 
     private val TAG : String = "NetworkRequest"
 
-    private val testService by lazy {
+    val testService by lazy {
         getService(TestService::class.java)
     }
-
-    @JvmName("getTestService1")
-    fun getTestService() = testService
 
     override fun onLogging(msg: String) {
         when {

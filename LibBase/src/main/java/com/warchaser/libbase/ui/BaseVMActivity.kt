@@ -8,12 +8,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewbinding.ViewBinding
 import com.trello.rxlifecycle3.components.support.RxAppCompatActivity
+import com.trello.rxlifecycle3.components.support.RxFragmentActivity
 import com.warchaser.libcommonutils.AppManager
 import com.warchaser.libcommonutils.PackageUtil
 import me.yokeyword.fragmentation.*
 import me.yokeyword.fragmentation.anim.FragmentAnimator
 
-abstract class BaseVMActivity<VB: ViewBinding>(private val inflate : (LayoutInflater) -> VB)  : RxAppCompatActivity(), ISupportActivity {
+abstract class BaseVMActivity<VB: ViewBinding>(private val inflate : (LayoutInflater) -> VB)  : RxFragmentActivity(), ISupportActivity {
 
     protected lateinit var TAG : String
 

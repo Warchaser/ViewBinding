@@ -1,5 +1,6 @@
 package com.warchaser.libbase.network.bean.service.coroutine
 
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -56,6 +57,7 @@ abstract class BaseRetrofitProvider {
     fun <S> getService(serviceInterface : Class<S>) : S = Retrofit.Builder()
         .client(mClient)
         .addConverterFactory(GsonConverterFactory.create())
+        .addCallAdapterFactory(CoroutineCallAdapterFactory.invoke())
         .baseUrl(getBaseURL())
         .build()
         .create(serviceInterface)
