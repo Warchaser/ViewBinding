@@ -1,9 +1,10 @@
 package com.warchaser.viewbinding.home.viewmodel
 
+import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.gson.JsonObject
+import com.kunminx.architecture.ui.callback.UnPeekLiveData
 import com.warchaser.libbase.ui.BaseViewModel
 import com.warchaser.libcommonutils.NLog
 import com.warchaser.viewbinding.home.repository.MVVMDemoRepository
@@ -20,6 +21,9 @@ class MVVMDemoViewModel : BaseViewModel(){
 
     private val _uiState = MutableLiveData<MVVMDemoUIState<Body<VIN>>>()
 
+    val vinState = UnPeekLiveData<VIN>()
+    var accessToken = ObservableField<String>()
+
     val uiState : LiveData<MVVMDemoUIState<Body<VIN>>>
         get() = _uiState
 
@@ -27,7 +31,8 @@ class MVVMDemoViewModel : BaseViewModel(){
         viewModelScope.launch(Dispatchers.Main){
             NLog.e(TAG, "getVIN")
             repository.getVIN().collect {
-                _uiState.postValue(it)
+                accessToken.set(it.responseBody.accessToken)
+                vinState.postValue(it.responseBody)
             }
         }
     }

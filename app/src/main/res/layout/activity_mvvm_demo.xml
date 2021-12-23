@@ -7,17 +7,21 @@
         <variable
             name="viewModel"
             type="com.warchaser.viewbinding.home.viewmodel.MVVMDemoViewModel" />
-        
+
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center">
 
         <TextView
+            android:id="@+id/mTvAccessToken"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp_39"
+            android:text="@{viewModel.accessToken}"/>
 
         <Button
             android:id="@+id/mBtnGetVIN"
@@ -25,7 +29,8 @@
             android:layout_height="wrap_content"
             android:text="get vin"
             android:textSize="@dimen/sp_39"
-            android:onClick="@{() -> viewModel.getVIN()}"/>
+            android:onClick="@{() -> viewModel.getVIN()}"
+            android:layout_marginTop="@dimen/dip_10"/>
 
     </LinearLayout>
 
