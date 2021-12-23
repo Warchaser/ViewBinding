@@ -26,9 +26,11 @@ abstract class BaseRetrofitProvider {
     private val mClient : OkHttpClient
         get(){
             val builder = OkHttpClient.Builder()
-            val logging = HttpLoggingInterceptor {
-                onLogging(it)
-            }
+            val logging = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger{
+                override fun log(message: String) {
+                    onLogging(message)
+                }
+            })
 
             logging.level = HttpLoggingInterceptor.Level.BODY
 
@@ -47,7 +49,9 @@ abstract class BaseRetrofitProvider {
 
     protected abstract fun onLogging(msg : String)
 
-    protected abstract fun overrideOkHttpClient(builder : OkHttpClient.Builder)
+    protected fun overrideOkHttpClient(builder : OkHttpClient.Builder){
+
+    }
 
     fun <S> getService(serviceInterface : Class<S>) : S = Retrofit.Builder()
         .client(mClient)

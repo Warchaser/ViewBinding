@@ -50,6 +50,7 @@ abstract class BaseVMActivity<VB: ViewBinding>(private val inflate : (LayoutInfl
         mViewBond = inflate(layoutInflater)
         setContentView(mViewBond.root)
         afterSetContentView(savedInstanceState)
+        setVariable()
         startObserve()
     }
 
@@ -88,6 +89,8 @@ abstract class BaseVMActivity<VB: ViewBinding>(private val inflate : (LayoutInfl
      * 启动观察回调
      * */
     protected abstract fun startObserve()
+
+    protected abstract fun setVariable()
 
     override fun getSupportDelegate(): SupportActivityDelegate? = mDelegate
 

@@ -19,6 +19,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
+        <Button
+            android:id="@+id/mBtnGetVIN"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="get vin"
+            android:textSize="@dimen/sp_39"
+            android:onClick="@{() -> viewModel.getVIN()}"/>
+
     </LinearLayout>
 
 
