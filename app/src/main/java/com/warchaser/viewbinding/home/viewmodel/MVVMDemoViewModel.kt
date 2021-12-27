@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.kunminx.architecture.ui.callback.UnPeekLiveData
 import com.warchaser.libbase.network.bean.coroutine.Result
-import com.warchaser.libbase.ui.BaseViewModel
 import com.warchaser.libcommonutils.NLog
 import com.warchaser.viewbinding.home.repository.MVVMDemoRepository
 import com.warchaser.viewbinding.home.state.MVVMDemoUIState
@@ -16,7 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class MVVMDemoViewModel : BaseViewModel(){
+class MVVMDemoViewModel : BaseTypedViewModel(){
 
     private val repository = MVVMDemoRepository()
 
@@ -31,15 +30,15 @@ class MVVMDemoViewModel : BaseViewModel(){
     fun getVIN(){
         viewModelScope.launch(Dispatchers.Main){
             NLog.e(TAG, "getVIN")
-            repository.getVIN().collect<Result<Body<VIN>>> {
+            repository.getVIN().collect {
                 if(it.isSuccess){
-                    val success = ((it as Result.Success<Body<VIN>>).body)?.responseBody
+                    val success = getResponseBody(it)
                     success?.run {
                         this@MVVMDemoViewModel.accessToken.set(accessToken)
 //                        vinState.postValue(this)
                     }
                 } else {
-                    val error = it as Result.Error
+                    val error = getError(it)
                     this@MVVMDemoViewModel.accessToken.set(error.msg)
 //                    vinState.postValue(VIN(error.msg, "", ""))
                 }
