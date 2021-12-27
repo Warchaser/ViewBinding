@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.kunminx.architecture.ui.callback.UnPeekLiveData
+import com.warchaser.libbase.network.bean.coroutine.Result
 import com.warchaser.libbase.ui.BaseViewModel
 import com.warchaser.libcommonutils.NLog
 import com.warchaser.viewbinding.home.repository.MVVMDemoRepository
@@ -30,9 +31,18 @@ class MVVMDemoViewModel : BaseViewModel(){
     fun getVIN(){
         viewModelScope.launch(Dispatchers.Main){
             NLog.e(TAG, "getVIN")
-            repository.getVIN().collect {
-                accessToken.set(it.responseBody.accessToken)
-                vinState.postValue(it.responseBody)
+            repository.getVIN().collect<Result<Body<VIN>>> {
+                if(it.isSuccess){
+                    val success = ((it as Result.Success<Body<VIN>>).body)?.responseBody
+                    success?.run {
+                        this@MVVMDemoViewModel.accessToken.set(accessToken)
+//                        vinState.postValue(this)
+                    }
+                } else {
+                    val error = it as Result.Error
+                    this@MVVMDemoViewModel.accessToken.set(error.msg)
+//                    vinState.postValue(VIN(error.msg, "", ""))
+                }
             }
         }
     }

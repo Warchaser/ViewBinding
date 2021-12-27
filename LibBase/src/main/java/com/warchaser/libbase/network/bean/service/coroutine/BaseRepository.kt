@@ -21,6 +21,29 @@ open class BaseRepository{
         Result.Error(errorMsg)
     }
 
+    suspend fun <T : Any> safeApiCall(call : suspend () -> Result<T>) : Result<T> = try {
+        call()
+    } catch (e : Throwable) {
+        Result.Error(e.message!!)
+    }
+
+    suspend fun <T : Any> safeApiCallResponse(call : suspend () -> Response<T>) : Flow<Result<T>> = flow{
+        try {
+            val response = call.invoke()
+            response.run {
+                if(code() != CODE_SUCCESS){
+                    emit(Result.Error(message()))
+                } else {
+                    val result = Result.Success(body())
+                    result.isSuccess = true
+                    emit(result)
+                }
+            }
+        } catch (e : Throwable) {
+            emit(Result.Error(e.toString()))
+        }
+    }.flowOn(Dispatchers.IO)
+
     suspend fun <T : Any> executeResponse(response: Response<T>, successBlock: (suspend CoroutineScope.() -> Unit)? = null, errorBlock: (suspend  CoroutineScope.() -> Unit)? = null): Result<T> = coroutineScope{
         if(response.code() == CODE_SUCCESS){
             errorBlock?.let { it() }

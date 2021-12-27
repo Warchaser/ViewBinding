@@ -2,6 +2,8 @@ package com.warchaser.libbase.network.bean.coroutine
 
 sealed class Result<out T : Any>{
 
+    var isSuccess = false
+
     data class Success<out T : Any>(val body : T?) : Result<T>()
     data class Error(val msg : String) : Result<Nothing>()
 
