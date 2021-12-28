@@ -1,7 +1,10 @@
 package com.warchaser.libbase.network.bean.coroutine
 
+import com.warchaser.libcommonutils.NLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
+
+private val TAG : String = "LibBase.TAG"
 
 sealed class Result<out T : Any>{
 
@@ -21,6 +24,7 @@ sealed class Result<out T : Any>{
 
 suspend fun <T : Any> Result<T>.onSuccess(successBlock: (suspend CoroutineScope.(T) -> Unit)? = null) : Result<T> = coroutineScope {
     if(isSuccess){
+        NLog.e(TAG, "onSuccess current coroutineContext is $coroutineContext")
         (this@onSuccess as Result.Success<*>).body?.run {
             successBlock?.invoke(this@coroutineScope, this as T)
         }
@@ -30,6 +34,7 @@ suspend fun <T : Any> Result<T>.onSuccess(successBlock: (suspend CoroutineScope.
 
 suspend fun <T : Any> Result<T>.onError(errorBlock: (suspend CoroutineScope.(String) -> Unit)? = null) : Result<T> = coroutineScope {
     if(!isSuccess){
+        NLog.e(TAG, "onError current coroutineContext is $coroutineContext")
         errorBlock?.invoke(this, (this@onError as Result.Error).msg)
     }
     this@onError

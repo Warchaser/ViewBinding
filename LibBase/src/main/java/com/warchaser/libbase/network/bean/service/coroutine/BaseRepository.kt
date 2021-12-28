@@ -3,6 +3,8 @@ package com.warchaser.libbase.network.bean.service.coroutine
 import com.warchaser.libbase.network.bean.coroutine.CODE_SUCCESS
 import retrofit2.Response
 import com.warchaser.libbase.network.bean.coroutine.Result
+import com.warchaser.libcommonutils.NLog
+import com.warchaser.libcommonutils.PackageUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
@@ -10,8 +12,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 
 open class BaseRepository{
+
+    protected val TAG : String by lazy {
+        PackageUtil.getSimpleClassName(this)
+    }
 
     suspend fun <T : Any> apiCall(call : suspend () -> Response<T>) : Response<T> = call.invoke()
 
@@ -65,7 +72,8 @@ open class BaseRepository{
         }
     }
 
-    suspend fun <T : Any> safeApiCallArgus(call : suspend () -> Response<T>) : Result<T> = coroutineScope{
+    suspend fun <T : Any> safeApiCallArgus(call : suspend () -> Response<T>) : Result<T> = withContext(Dispatchers.IO){
+        NLog.e(TAG, "safeApiCallArgus current coroutineContext is $coroutineContext")
         try {
             val response = call.invoke()
             response.run {
