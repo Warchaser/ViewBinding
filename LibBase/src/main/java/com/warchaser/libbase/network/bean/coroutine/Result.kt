@@ -1,5 +1,8 @@
 package com.warchaser.libbase.network.bean.coroutine
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
+
 sealed class Result<out T : Any>{
 
     var isSuccess = false
@@ -14,4 +17,20 @@ sealed class Result<out T : Any>{
         }
     }
 
+}
+
+suspend fun <T : Any> Result<T>.onSuccess(successBlock: (suspend CoroutineScope.(T) -> Unit)? = null) : Result<T> = coroutineScope {
+    if(isSuccess){
+        (this@onSuccess as Result.Success<*>).body?.run {
+            successBlock?.invoke(this@coroutineScope, this as T)
+        }
+    }
+    this@onSuccess
+}
+
+suspend fun <T : Any> Result<T>.onError(errorBlock: (suspend CoroutineScope.(String) -> Unit)? = null) : Result<T> = coroutineScope {
+    if(!isSuccess){
+        errorBlock?.invoke(this, (this@onError as Result.Error).msg)
+    }
+    this@onError
 }

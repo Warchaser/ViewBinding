@@ -6,8 +6,6 @@ import com.warchaser.viewbinding.network.NetworkRequest
 import com.warchaser.viewbinding.network.bean.Body
 import com.warchaser.viewbinding.network.bean.VIN
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.flow
-import kotlin.coroutines.suspendCoroutine
 
 class MVVMDemoRepository : BaseRepository(){
 
@@ -24,5 +22,9 @@ class MVVMDemoRepository : BaseRepository(){
     suspend fun getVIN() =
         safeApiCallResponse { NetworkRequest.instance.testService.getVIN() }
 
+    suspend fun getVINArgus(successBlock: (suspend CoroutineScope.(Result.Success<Body<VIN>>) -> Unit)? = null, errorBlock: (suspend CoroutineScope.(String) -> Unit)? = null) =
+        safeApiCallArgus({NetworkRequest.instance.testService.getVIN()}, successBlock, errorBlock)
+
+    suspend fun getVINArgus1() = safeApiCallArgus { NetworkRequest.instance.testService.getVIN() }
 
 }

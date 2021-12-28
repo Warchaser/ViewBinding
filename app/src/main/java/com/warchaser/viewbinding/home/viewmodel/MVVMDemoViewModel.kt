@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.kunminx.architecture.ui.callback.UnPeekLiveData
 import com.warchaser.libbase.network.bean.coroutine.Result
+import com.warchaser.libbase.network.bean.coroutine.onError
+import com.warchaser.libbase.network.bean.coroutine.onSuccess
 import com.warchaser.libcommonutils.NLog
 import com.warchaser.viewbinding.home.repository.MVVMDemoRepository
 import com.warchaser.viewbinding.home.state.MVVMDemoUIState
@@ -30,19 +32,44 @@ class MVVMDemoViewModel : BaseTypedViewModel(){
     fun getVIN(){
         viewModelScope.launch(Dispatchers.Main){
             NLog.e(TAG, "getVIN")
-            repository.getVIN().collect {
-                if(it.isSuccess){
-                    val success = getResponseBody(it)
-                    success?.run {
-                        this@MVVMDemoViewModel.accessToken.set(accessToken)
-//                        vinState.postValue(this)
-                    }
-                } else {
-                    val error = getError(it)
-                    this@MVVMDemoViewModel.accessToken.set(error.msg)
-//                    vinState.postValue(VIN(error.msg, "", ""))
+//            repository.getVINArgus(
+//                successBlock = {
+//                    success ->
+//                        getResponseBody(success)?.run {
+//                            this@MVVMDemoViewModel.accessToken.set(accessToken)
+//                        }
+//
+//                },
+//                errorBlock = {
+//                    error ->
+//                        accessToken.set(error)
+//                }
+//            )
+
+            repository.getVINArgus1()
+                .onSuccess {
+                    response ->
+                        getResponseBody(response).run {
+                            this@MVVMDemoViewModel.accessToken.set(accessToken)
+                        }
                 }
-            }
+                .onError {
+                    error ->
+                        accessToken.set(error)
+                }
+//            repository.getVIN().collect {
+//                if(it.isSuccess){
+//                    val success = getResponseBody(it)
+//                    success?.run {
+//                        this@MVVMDemoViewModel.accessToken.set(accessToken)
+////                        vinState.postValue(this)
+//                    }
+//                } else {
+//                    val error = getError(it)
+//                    this@MVVMDemoViewModel.accessToken.set(error.msg)
+////                    vinState.postValue(VIN(error.msg, "", ""))
+//                }
+//            }
         }
     }
 

@@ -44,6 +44,45 @@ open class BaseRepository{
         }
     }.flowOn(Dispatchers.IO)
 
+    suspend fun <T : Any> safeApiCallArgus(call : suspend () -> Response<T>, successBlock: (suspend CoroutineScope.(Result.Success<T>) -> Unit)? = null, errorBlock: (suspend CoroutineScope.(String) -> Unit)? = null) : Result<T> = coroutineScope{
+        try {
+            val response = call.invoke()
+            response.run {
+                if(code() != CODE_SUCCESS){
+                    errorBlock?.invoke(this@coroutineScope, message())
+                    Result.Error(message())
+                } else {
+                    val result = Result.Success(body())
+                    result.isSuccess = true
+                    successBlock?.invoke(this@coroutineScope, result)
+                    result
+                }
+            }
+        } catch (e : Throwable) {
+            val msg = e.toString()
+            errorBlock?.invoke(this@coroutineScope, msg)
+            Result.Error(msg)
+        }
+    }
+
+    suspend fun <T : Any> safeApiCallArgus(call : suspend () -> Response<T>) : Result<T> = coroutineScope{
+        try {
+            val response = call.invoke()
+            response.run {
+                if(code() != CODE_SUCCESS){
+                    Result.Error(message())
+                } else {
+                    val result = Result.Success(body())
+                    result.isSuccess = true
+                    result
+                }
+            }
+        } catch (e : Throwable) {
+            val msg = e.toString()
+            Result.Error(msg)
+        }
+    }
+
     suspend fun <T : Any> executeResponse(response: Response<T>, successBlock: (suspend CoroutineScope.() -> Unit)? = null, errorBlock: (suspend  CoroutineScope.() -> Unit)? = null): Result<T> = coroutineScope{
         if(response.code() == CODE_SUCCESS){
             errorBlock?.let { it() }
