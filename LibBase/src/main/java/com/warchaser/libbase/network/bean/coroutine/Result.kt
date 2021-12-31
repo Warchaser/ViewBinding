@@ -25,9 +25,7 @@ sealed class Result<out T : Any>{
 suspend fun <T : Any> Result<T>.onSuccess(successBlock: (suspend CoroutineScope.(T) -> Unit)? = null) : Result<T> = coroutineScope {
     if(isSuccess){
         NLog.e(TAG, "onSuccess current coroutineContext is $coroutineContext")
-        (this@onSuccess as Result.Success<*>).body?.run {
-            successBlock?.invoke(this@coroutineScope, this as T)
-        }
+        successBlock?.invoke(this, (this@onSuccess as Result.Success<*>).body as T)
     }
     this@onSuccess
 }
