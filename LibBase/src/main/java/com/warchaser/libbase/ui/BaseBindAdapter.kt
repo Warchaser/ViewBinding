@@ -14,6 +14,8 @@ abstract class BaseBindAdapter<T, VB : ViewBinding, VH : BaseBindAdapter.BaseBin
 
     private var mCurrentIndex = -1
 
+    protected var mItemClickListener : ItemClickListener<T>? = null
+
     @SuppressLint("NotifyDataSetChanged")
     fun notifyDataSetAllChanged(dataList : ArrayList<T>){
         mDataList.clear()
@@ -33,12 +35,12 @@ abstract class BaseBindAdapter<T, VB : ViewBinding, VH : BaseBindAdapter.BaseBin
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
+    final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         val baseViewHolder : VH
         val viewBinding = mInflate(LayoutInflater.from(parent.context), parent, false)
-        onCreateViewHolder(viewBinding.root, viewBinding)
         val viewHolder = BaseBindHolder(viewBinding)
         baseViewHolder = viewHolder as VH
+        onCreateViewHolder(viewBinding.root, viewBinding, viewHolder)
         return baseViewHolder
     }
 
@@ -59,13 +61,41 @@ abstract class BaseBindAdapter<T, VB : ViewBinding, VH : BaseBindAdapter.BaseBin
     /**
      * 请重写此函数,以便实现ClickListener绑定等逻辑
      * */
-    protected open fun onCreateViewHolder(rootView : View, VB : ViewBinding){
+    protected open fun onCreateViewHolder(rootView : View, VB : ViewBinding, viewHolder : VH){
 
     }
 
     override fun getItemCount(): Int = mDataList.size
 
     protected fun getItem(position: Int) : T = mDataList[position]
+
+    fun setOnItemClickListener(listener: ItemClickListener<T>){
+        mItemClickListener = listener
+    }
+
+    interface ItemClickListener<T>{
+        fun onItemClick(position: Int, bean : T)
+    }
+
+    protected open fun click(position: Int, bean : T, id : Int){
+
+    }
+
+    protected inner class ClickListenerDelegate(private val holder: VH) : View.OnClickListener{
+
+        override fun onClick(v: View?) {
+            val position = holder.adapterPosition
+            if(position == RecyclerView.NO_POSITION){
+                return
+            }
+            v?.run {
+                val bean = mDataList[position]
+                mItemClickListener?.run {
+                    click(position, bean, id)
+                }
+            }
+        }
+    }
 
     open class BaseBindHolder(private val binding: ViewBinding) : RecyclerView.ViewHolder(binding.root){
         constructor(itemView : View) : this(ViewBinding { itemView })

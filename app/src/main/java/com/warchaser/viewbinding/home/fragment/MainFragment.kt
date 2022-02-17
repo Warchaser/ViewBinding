@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.warchaser.libbase.ui.BaseBindAdapter
 import com.warchaser.viewbinding.databinding.FragmentMainBinding
 import com.warchaser.viewbinding.gloading.GLoadingFragment
 import com.warchaser.viewbinding.home.adapter.MainAdapter
@@ -19,6 +21,11 @@ class MainFragment : GLoadingFragment<MainFragmentPresenter, MainFragmentView, F
         showLoading()
         getViewBound().mTv.text = "This part is the MainFragment!!!"
         mAdapter = MainAdapter()
+        mAdapter?.setOnItemClickListener(object : BaseBindAdapter.ItemClickListener<String>{
+            override fun onItemClick(position: Int, bean: String) {
+                Toast.makeText(requireContext(), bean, Toast.LENGTH_SHORT).show()
+            }
+        })
         getViewBound().mRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         getViewBound().mRecyclerView.adapter = mAdapter
         val list = ArrayList<String>()
