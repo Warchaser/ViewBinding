@@ -61,7 +61,7 @@ abstract class BaseBindAdapter<T, VB : ViewBinding, VH : BaseBindAdapter.BaseBin
     /**
      * 请重写此函数,以便实现ClickListener绑定等逻辑
      * */
-    protected open fun onCreateViewHolder(rootView : View, VB : ViewBinding, viewHolder : VH){
+    protected open fun onCreateViewHolder(rootView : View, viewBinding : VB, viewHolder : VH){
 
     }
 
@@ -79,6 +79,12 @@ abstract class BaseBindAdapter<T, VB : ViewBinding, VH : BaseBindAdapter.BaseBin
 
     protected open fun click(position: Int, bean : T, id : Int){
 
+    }
+
+    protected fun setClickListener(clickListenerDelegate: ClickListenerDelegate, vararg views : View){
+        views.forEach {
+            it.setOnClickListener(clickListenerDelegate)
+        }
     }
 
     protected inner class ClickListenerDelegate(private val holder: VH) : View.OnClickListener{

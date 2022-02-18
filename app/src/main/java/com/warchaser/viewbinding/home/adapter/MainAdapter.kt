@@ -14,11 +14,10 @@ class MainAdapter : BaseCommonAdapter<String, ItemMainBinding>(ItemMainBinding::
         vb.mTv.text = getItem(position)
     }
 
-    override fun onCreateViewHolder(rootView: View, VB: ViewBinding, viewHolder: BaseBindHolder) {
-        super.onCreateViewHolder(rootView, VB, viewHolder)
+    override fun onCreateViewHolder(rootView: View, viewBinding: ItemMainBinding, viewHolder: BaseBindHolder) {
+        super.onCreateViewHolder(rootView, viewBinding, viewHolder)
         val clickListenerDelegate = ClickListenerDelegate(viewHolder)
-        rootView.findViewById<TextView>(R.id.mTv).setOnClickListener(clickListenerDelegate)
-        rootView.setOnClickListener(clickListenerDelegate)
+        setClickListener(clickListenerDelegate, rootView, viewBinding.mTv)
     }
 
     override fun click(position: Int, bean: String, id: Int) {
