@@ -21,9 +21,14 @@ class MainFragment : GLoadingFragment<MainFragmentPresenter, MainFragmentView, F
         showLoading()
         getViewBound().mTv.text = "This part is the MainFragment!!!"
         mAdapter = MainAdapter()
-        mAdapter?.setOnItemClickListener(object : BaseBindAdapter.ItemClickListener<String>{
+
+        mAdapter?.setOnItemClickListener(object : MainAdapter.MainClickListener{
+            override fun onTextClick(bean: String) {
+                Toast.makeText(requireContext(), "TextClick:$bean", Toast.LENGTH_SHORT).show()
+            }
+
             override fun onItemClick(position: Int, bean: String) {
-                Toast.makeText(requireContext(), bean, Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "ItemClick:$bean", Toast.LENGTH_SHORT).show()
             }
         })
         getViewBound().mRecyclerView.layoutManager = LinearLayoutManager(requireContext())

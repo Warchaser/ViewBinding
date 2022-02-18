@@ -90,9 +90,7 @@ abstract class BaseBindAdapter<T, VB : ViewBinding, VH : BaseBindAdapter.BaseBin
             }
             v?.run {
                 val bean = mDataList[position]
-                mItemClickListener?.run {
-                    click(position, bean, id)
-                }
+                click(position, bean, id)
             }
         }
     }
