@@ -12,7 +12,7 @@ class ViewBindingDemoActivity :
     override fun afterSetContentView(savedInstanceState: Bundle?) {
         super.afterSetContentView(savedInstanceState)
 
-        getViewBound().mTv.text = "This part is the ViewBindingDemoActivity!!!"
+        getViewBound().mTv.text = String.format(getString(R.string.format_hint), TAG)
 
         initializeFragment()
     }

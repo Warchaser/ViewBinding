@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.warchaser.libbase.ui.BaseBindAdapter
+import com.warchaser.viewbinding.R
 import com.warchaser.viewbinding.databinding.FragmentMainBinding
 import com.warchaser.viewbinding.gloading.GLoadingFragment
 import com.warchaser.viewbinding.home.adapter.MainAdapter
@@ -19,7 +20,7 @@ class MainFragment : GLoadingFragment<MainFragmentPresenter, MainFragmentView, F
 
     override fun onInitView(view: View, savedInstanceState: Bundle?) {
         showLoading()
-        getViewBound().mTv.text = "This part is the MainFragment!!!"
+        getViewBound().mTv.text = String.format(getString(R.string.format_hint), TAG)
         mAdapter = MainAdapter()
 
         mAdapter?.setOnItemClickListener(object : MainAdapter.MainClickListener{

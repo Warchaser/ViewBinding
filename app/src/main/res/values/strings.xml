@@ -9,4 +9,6 @@
     <string name="btn_launch_view_binding_demo">launch view binding demo</string>
     <string name="btn_launch_mvvm_demo">launch mvvm demo</string>
 
+    <string name="format_hint">This part is the %1$s!!!</string>
+
 </resources>
