@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
+import kotlin.system.measureTimeMillis
 
 open class BaseRepository{
 
@@ -73,22 +74,30 @@ open class BaseRepository{
     }
 
     suspend fun <T : Any> safeApiCallArgus(call : suspend () -> Response<T>) : Result<T> = withContext(Dispatchers.IO){
-        NLog.e(TAG, "safeApiCallArgus current coroutineContext is $coroutineContext")
-        try {
-            val response = call.invoke()
-            response.run {
-                if(code() != CODE_SUCCESS){
-                    Result.Error(message())
-                } else {
-                    val result = Result.Success(body())
-                    result.isSuccess = true
-                    result
+        var responseResult : Result<T>?
+        val duration = measureTimeMillis {
+            NLog.e(TAG, "safeApiCallArgus current coroutineContext is $coroutineContext")
+            responseResult = try {
+                val response = call.invoke()
+                response.run {
+                    if(code() != CODE_SUCCESS){
+                        Result.Error(message())
+                    } else {
+                        val result = Result.Success(body())
+                        result.isSuccess = true
+                        result
+                    }
                 }
+            } catch (e : Throwable) {
+                val msg = e.toString()
+                Result.Error(msg)
             }
-        } catch (e : Throwable) {
-            val msg = e.toString()
-            Result.Error(msg)
         }
+
+        NLog.e(TAG, "$call run with $duration ms")
+
+        responseResult!!
+
     }
 
     suspend fun <T : Any> executeResponse(response: Response<T>, successBlock: (suspend CoroutineScope.() -> Unit)? = null, errorBlock: (suspend  CoroutineScope.() -> Unit)? = null): Result<T> = coroutineScope{
