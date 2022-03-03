@@ -13,6 +13,8 @@ class NetworkRequest private constructor(): BaseRetrofitProvider(){
 
     private val TAG : String = "NetworkRequest"
 
+    override fun logSwitch(): Boolean  = true
+
     val testService by lazy {
         getService(TestService::class.java)
     }

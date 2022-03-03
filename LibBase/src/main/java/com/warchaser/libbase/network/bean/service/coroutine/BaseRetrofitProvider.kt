@@ -16,6 +16,8 @@ abstract class BaseRetrofitProvider {
 
     private val mBaseURL : String = "https://www.fakeurl.com"
 
+    private val mLogSwitch : Boolean = true
+
     protected open fun getConnectTimeOut() : Long = mConnectTimeOut
 
     protected open fun getReadTimeOut() : Long = mReadTimeOut
@@ -24,18 +26,24 @@ abstract class BaseRetrofitProvider {
 
     protected open fun getResponseInterceptor() : Interceptor? = null
 
+    protected open fun logSwitch() : Boolean = mLogSwitch
+
     private val mClient : OkHttpClient
         get(){
             val builder = OkHttpClient.Builder()
-            val logging = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger{
-                override fun log(message: String) {
-                    onLogging(message)
-                }
-            })
 
-            logging.level = HttpLoggingInterceptor.Level.BODY
+            if(logSwitch()){
+                val logging = HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger{
+                    override fun log(message: String) {
+                        onLogging(message)
+                    }
+                })
 
-            builder.addInterceptor(logging)
+                logging.level = HttpLoggingInterceptor.Level.BODY
+
+                builder.addInterceptor(logging)
+            }
+
             val responseInterceptor = getResponseInterceptor()
             responseInterceptor?.run {
                 builder.addNetworkInterceptor(this)
@@ -50,7 +58,7 @@ abstract class BaseRetrofitProvider {
 
     protected abstract fun onLogging(msg : String)
 
-    protected fun overrideOkHttpClient(builder : OkHttpClient.Builder){
+    protected open fun overrideOkHttpClient(builder : OkHttpClient.Builder){
 
     }
 
