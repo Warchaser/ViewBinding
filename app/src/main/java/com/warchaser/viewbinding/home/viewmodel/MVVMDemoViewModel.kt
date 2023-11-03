@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.kunminx.architecture.ui.callback.UnPeekLiveData
-import com.warchaser.libbase.network.bean.coroutine.Result
 import com.warchaser.libbase.network.bean.coroutine.onError
 import com.warchaser.libbase.network.bean.coroutine.onSuccess
 import com.warchaser.libcommonutils.NLog
@@ -14,7 +13,6 @@ import com.warchaser.viewbinding.home.state.MVVMDemoUIState
 import com.warchaser.viewbinding.network.bean.Body
 import com.warchaser.viewbinding.network.bean.VIN
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class MVVMDemoViewModel : BaseTypedViewModel(){

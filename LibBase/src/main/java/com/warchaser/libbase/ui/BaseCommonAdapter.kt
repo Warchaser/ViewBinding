@@ -4,4 +4,4 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
 
-abstract class BaseCommonAdapter<T, VB : ViewBinding>(mInflate : (LayoutInflater, ViewGroup, Boolean) -> VB) : BaseBindAdapter<T, VB, BaseBindAdapter.BaseBindHolder>(mInflate)
+abstract class BaseCommonAdapter<T, VB : ViewBinding>(mInflate : (LayoutInflater, ViewGroup, Boolean) -> VB) : BaseBindAdapter<T, VB, BaseBindHolder>()
