@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
+import okhttp3.ResponseBody
 import kotlin.system.measureTimeMillis
 
 open class BaseRepository{
@@ -58,7 +59,7 @@ open class BaseRepository{
             response.run {
                 if(code() != CODE_SUCCESS){
                     errorBlock?.invoke(this@coroutineScope, message())
-                    Result.Error(message())
+                    Result.Error(message(), code())
                 } else {
                     val result = Result.Success(body())
                     result.isSuccess = true
@@ -81,7 +82,13 @@ open class BaseRepository{
                 val response = call.invoke()
                 response.run {
                     if(code() != CODE_SUCCESS){
-                        Result.Error(message())
+                        val message = if("" == message()){
+                            val body = errorBody() as ResponseBody
+                            body.string()
+                        } else {
+                            message()
+                        }
+                        Result.Error(message, code())
                     } else {
                         val result = Result.Success(body())
                         result.isSuccess = true
@@ -90,7 +97,7 @@ open class BaseRepository{
                 }
             } catch (e : Throwable) {
                 val msg = e.toString()
-                Result.Error(msg)
+                Result.Error(msg, -1)
             }
         }
 

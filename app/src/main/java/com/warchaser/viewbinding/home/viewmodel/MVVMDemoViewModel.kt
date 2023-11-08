@@ -52,8 +52,8 @@ class MVVMDemoViewModel : BaseTypedViewModel(){
                         }
                 }
                 .onError {
-                    error ->
-                        accessToken.set(error)
+                    error, code ->
+                        accessToken.set("$error responseCode is $code")
                 }
 //            repository.getVIN().collect {
 //                if(it.isSuccess){
