@@ -75,7 +75,7 @@ open class BaseRepository{
     }
 
     suspend fun <T : Any> safeApiCallArgus(call : suspend () -> Response<T>) : Result<T> = withContext(Dispatchers.IO){
-        var responseResult : Result<T>?
+        var responseResult : Result<T>
         val duration = measureTimeMillis {
             NLog.e(TAG, "safeApiCallArgus current coroutineContext is $coroutineContext")
             responseResult = try {
@@ -103,7 +103,7 @@ open class BaseRepository{
 
         NLog.e(TAG, "$call run with $duration ms")
 
-        responseResult!!
+        responseResult
 
     }
 
