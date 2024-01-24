@@ -10,5 +10,5 @@ abstract class BaseTypedViewModel : BaseViewModel() {
 
     fun <T> getError(result: Result<Body<T>>) = result as Result.Error
 
-    fun <T> getResponseBody(body : Body<T>) = body.responseBody
+    fun <T> getResponseBody(body : Body<T>) : T? = body.responseBody
 }
